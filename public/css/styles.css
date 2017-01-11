@@ -1,0 +1,19 @@
+@import '~@angular/material/core/theming/prebuilt/pink-bluegrey.css';
+
+body {
+    margin: 0;
+}
+
+universal-angular-demo {
+  padding: 1em;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  margin-top: 50px;
+  display: block;
+}
+
+md-spinner {
+  position: fixed;
+  top: calc(50vh - 50px);
+  left: calc(50vw - 50px);
+}
