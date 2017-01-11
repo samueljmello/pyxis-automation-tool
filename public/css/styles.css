@@ -12,7 +12,7 @@ universal-angular-demo {
   display: block;
 }
 
-md-spinner {
+.loading-overlay md-spinner {
   position: fixed;
   top: calc(50vh - 50px);
   left: calc(50vw - 50px);
