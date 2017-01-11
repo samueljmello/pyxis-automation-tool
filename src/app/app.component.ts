@@ -9,14 +9,8 @@ import {
 } from '@angular/router';
 import '../../public/css/styles.css';
 @Component({
-  selector: 'universal-angular-demo',
-  template: `
-  <router-outlet>
-  <div class="loading-overlay" *ngIf="loading">
-    <md-spinner></md-spinner>
-  </div>
-  </router-outlet>
-  `
+  selector: 'app',
+  templateUrl: 'app.component.html'
 })
 export class AppComponent {
 

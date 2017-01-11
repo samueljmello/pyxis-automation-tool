@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
 import { AppComponent } from './app.component';
+import { ConfigComponent } from './config/config.component';
 import { MaterialModule } from '@angular/material';
 import { Routes, RouterModule } from '@angular/router';
 import { AppRouting, AppRoutingProviders } from './app.routing';
@@ -11,7 +12,8 @@ import { AppRouting, AppRoutingProviders } from './app.routing';
     RouterModule.forRoot(AppRouting)
   ],
   declarations: [
-    AppComponent
+    AppComponent,
+    ConfigComponent
   ],
   providers: [
     AppRoutingProviders
