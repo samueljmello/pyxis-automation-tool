@@ -45,6 +45,11 @@ module.exports = {
         query: {
           presets: ['es2015']
         }
+      },
+      {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        loaders: ['raw-loader', 'sass-loader'] // sass-loader not scss-loader
       }
     ]
   },
@@ -56,6 +61,10 @@ module.exports = {
 
     new HtmlWebpackPlugin({
       template: 'src/index.html'
+    }),
+
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env)
     })
   ]
 };

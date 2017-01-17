@@ -1,0 +1,5 @@
+<h1 md-dialog-title>{{ title }}</h1>
+<div md-dialog-content>{{ question }}</div>
+<div md-dialog-actions>
+  <button md-button *ngFor="let option of options; let i = index;" (click)="dialogRef.close(option.value)">{{ option.display }}</button>
+</div>

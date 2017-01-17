@@ -1,23 +1,34 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule }  from '@angular/platform-browser';
-import { AppComponent } from './app.component';
-import { ConfigComponent } from './config/config.component';
 import { MaterialModule } from '@angular/material';
-import { Routes, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule }  from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+
+import { AppComponent } from './app.component';
+import { ProcessComponent } from './components/process.component';
+import { QuickPromptComponent } from './components/quick-prompt.component';
+
+import { HttpService } from './services/http.service';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { AppRouting, AppRoutingProviders } from './app.routing';
+
 @NgModule({
   imports: [
     BrowserModule,
     MaterialModule.forRoot(),
+    FormsModule,
     RouterModule.forRoot(AppRouting)
   ],
   declarations: [
     AppComponent,
-    ConfigComponent
+    ProcessComponent,
+    QuickPromptComponent
   ],
   providers: [
-    AppRoutingProviders
+    AppRoutingProviders,
+    HttpService,
+    CookieService
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [ AppComponent, QuickPromptComponent ]
 })
 export class AppModule { }

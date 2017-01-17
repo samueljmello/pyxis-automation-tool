@@ -1,0 +1,71 @@
+@import '~@angular/material/core/theming/prebuilt/indigo-pink.scss';
+
+body {
+    margin: 0;
+    font-size: 14px;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+#loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255,255,255,0.8);
+}
+#loading .container {
+  position: relative;
+}
+#loading .container md-spinner {
+  position: absolute;
+  top: calc(50vh - 50px);
+  left: calc(50vw - 50px);
+}
+#content {
+  padding: 20px;
+}
+.wide {
+  width: 100%;
+}
+
+.invalid .md-input-underline {
+    border-color: rgba(255,0,0,.5);
+}
+
+.alert {
+  background-color: #c51162;
+  color: #fff;
+  padding: 10px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+[md-mini-fab] {
+  box-shadow: none !important;
+}
+
+.header-table h2, .header-table h3 {
+  margin: 0;
+}
+.header-table {
+  padding: 0 20px;
+}
+.header-table tr td:nth-child(2n+2) {
+  text-align: right;
+}
+
+.log-items .md-list-item {
+  height: auto;
+  padding: 3px 20px;
+  font-size: 12px;
+}
+.log-items .success {
+  color: #090;
+}
+.log-items .error {
+  color: #900;
+}
+.progress-bar {
+  margin: 20px 0;
+}

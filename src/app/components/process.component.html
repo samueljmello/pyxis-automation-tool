@@ -1,0 +1,82 @@
+<md-toolbar color="primary">
+  <span>
+    <button md-button>
+      <md-icon>track_changes</md-icon>  
+      <span>&nbsp;Pyxis Automation Tool</span>
+    </button>
+  </span>
+  <span style="flex: 1 1 auto;">&nbsp;</span>
+  <span>
+    <button md-icon-button (click)="refreshFeed()" title="Refresh Feed">
+      <md-icon>autorenew</md-icon>
+    </button>
+    <button md-icon-button (click)="toggleSettings()" title="Edit Settings">
+      <md-icon>settings_ethernet</md-icon>
+    </button>
+  </span>
+</md-toolbar>
+<div id="loading" *ngIf="loading">
+  <div class="container">
+    <md-spinner></md-spinner>
+  </div>
+</div>
+<div id="content">
+  <div id="feed" *ngIf="!configuration">
+    <table class="header-table wide">
+    <tr>
+    <td>
+      <h2 *ngIf="!rssFeed" class="notice">Please set up your API connection and accounts.</h2>
+    </td>
+    <td>
+      <button md-mini-fab *ngIf="rssFeed" (click)="processFeed()" title="Start Feed Repost" [disabled]="processing">
+        <md-icon>backup</md-icon>
+      </button>
+    </td>
+    </tr>
+    </table>
+    <!--
+    <md-list *ngIf="rssFeed && !processing">
+      <md-list-item *ngFor="let message of rssFeed.rss.channel.item; let i = index;">
+        <img md-list-avatar [src]="message.image._href">
+        <h3 md-line>{{message.title}}</h3>
+        <p md-line>
+          <span><a [href]="message.link" target="_BLANK">{{ message.link}}</a></span>
+        </p>
+        <p md-line>
+          <span><a [href]="message.enclosure._url" target="_BLANK">{{ message.enclosure._url}}</a></span>
+        </p>
+      </md-list-item>
+    </md-list>
+    <div *ngIf="rssFeed && processing">
+      <md-progress-bar class="progress-bar" [attr.color]="processColor" mode="determinate" [value]="processProgress">
+      </md-progress-bar>
+      <md-list class="log-items">
+        <md-list-item *ngFor="let logItem of processLog">
+          <h3 [ngClass]="logItem.classes" md-line>{{logItem.message}}</h3>
+        </md-list-item>
+      </md-list>
+    </div>
+    !-->
+  </div>
+  <div id="settings" *ngIf="configuration">
+    <h2>Settings</h2>
+    <span class="alert" *ngIf="settings.invalid">Please fill out all fields.</span>
+    <form (ngSubmit)="saveSettings()" #settingsForm="ngForm" novalidate>
+      <md-input-container class="wide">
+        <input md-input type="text" [(ngModel)]="settings.apiUrl" name="apiUrl" placeholder="Instagram Authentication URL">
+      </md-input-container>
+      <md-input-container class="wide">
+        <input md-input type="text" [(ngModel)]="settings.apiKey" name="apiKey" placeholder="Instagram API Key" readonly>
+      </md-input-container>
+      <md-input-container class="wide">
+        <input md-input type="text" [(ngModel)]="settings.fromAccounts" name="fromAccounts" placeholder="From Accounts">
+      </md-input-container>
+      <md-input-container class="wide">
+        <input md-input type="text" [(ngModel)]="settings.toAccounts" name="toAccounts" placeholder="To Accounts">
+      </md-input-container>
+      <button md-icon-button color="primary" type="submit">
+        <md-icon>save</md-icon>
+      </button>
+    </form>
+  </div>
+</div>
