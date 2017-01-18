@@ -5,8 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'angular2-cookie/core';
 import { HttpService } from '../services/http.service';
 
-import { QuickPromptComponent } from './quick-prompt.component';
-
 import { SettingsModel } from '../models/settings.model';
 import { LogMessageModel } from '../models/log-message.model';
 
@@ -19,6 +17,7 @@ export class ProcessComponent {
   private loading: boolean = false;
   private configuration: boolean = false;
   private processing: boolean = false;
+  private redirecting: boolean = false;
 
   private settings: SettingsModel = new SettingsModel();
 
@@ -31,7 +30,7 @@ export class ProcessComponent {
     this.loading = true;
     setTimeout(() => {
       this.restoreSettings();
-    }, 1500);
+    }, 750);
   }
 
   private restoreSettings() {
@@ -49,14 +48,7 @@ export class ProcessComponent {
         this.settings.apiKey = data['code'];
       }
       if (!this.settings.apiKey) {
-        const cId = process.env.PYXIS_INSTAGRAM_CLIENT_ID;
-        const rUrl = encodeURI(process.env.PYXIS_INSTAGRAM_REDIRECT_URL);
-        let dialogRef = this.dialog.open(QuickPromptComponent);
-        dialogRef.afterClosed().subscribe(result => {
-          if (result === 1) {
-            window.location.href = this.settings.apiUrl + `?client_id=${cId}&redirect_uri=${rUrl}&response_type=code`;
-          }
-        });
+        this.redirecting = true;
       } else if (!this.settings.fromAccounts || !this.settings.toAccounts) {
         this.settings.invalid = true;
         this.toggleConfiguration(true);
@@ -64,6 +56,29 @@ export class ProcessComponent {
       this.loading = false;
     });
 
+  }
+
+  private switchToRedirect() {
+    this.loading = true;
+    setTimeout(() => {
+      this.loading = false;
+      this.configuration = false;
+      this.redirecting = true;
+    }, 1000);
+  }
+
+  private processRedirect(task: number) {
+    switch(task) {
+      default:
+      case 1:
+        const cId = process.env.PYXIS_INSTAGRAM_CLIENT_ID;
+        const rUrl = encodeURI(process.env.PYXIS_INSTAGRAM_REDIRECT_URL);
+        window.location.href = this.settings.apiUrl + `?client_id=${cId}&redirect_uri=${rUrl}&response_type=code`;
+        break;
+      case 0:
+        this.redirecting = false;
+        break;
+    }
   }
 
   private getCookieAndParse(key: string) {

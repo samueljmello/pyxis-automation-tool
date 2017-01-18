@@ -66,6 +66,9 @@ body {
 .log-items .error {
   color: #900;
 }
-.progress-bar {
+.progress-bar, .h-pad {
   margin: 20px 0;
+}
+.actionable {
+  cursor: pointer;
 }

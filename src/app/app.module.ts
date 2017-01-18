@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { ProcessComponent } from './components/process.component';
-import { QuickPromptComponent } from './components/quick-prompt.component';
 
 import { HttpService } from './services/http.service';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
@@ -21,14 +20,13 @@ import { AppRouting, AppRoutingProviders } from './app.routing';
   ],
   declarations: [
     AppComponent,
-    ProcessComponent,
-    QuickPromptComponent
+    ProcessComponent
   ],
   providers: [
     AppRoutingProviders,
     HttpService,
     CookieService
   ],
-  bootstrap: [ AppComponent, QuickPromptComponent ]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }
