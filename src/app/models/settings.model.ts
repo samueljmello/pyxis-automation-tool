@@ -1,3 +1,5 @@
+import { AccountModel } from '../models/account.model';
+
 export class SettingsModel {
   public fromAccounts: Array<string> = new Array();
   public apiKey: string = '';

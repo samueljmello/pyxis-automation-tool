@@ -25,10 +25,11 @@
     <table class="header-table wide">
     <tr>
     <td>
-      <h2 md-dialog-title *ngIf="!rssFeed" class="notice">Please set up your API connection and accounts.</h2>
+      <h2 md-dialog-title *ngIf="settings.invalid" class="notice">Please set up your API connection and accounts.</h2>
+      <h2 md-dialog-title *ngIf="!settings.invalid" class="notice">Posts To Process</h2>
     </td>
     <td>
-      <button md-mini-fab *ngIf="rssFeed" (click)="processFeed()" title="Start Feed Repost" [disabled]="processing">
+      <button md-mini-fab *ngIf="!settings.invalid" (click)="processFeed()" title="Start Feed Repost" [disabled]="processing">
         <md-icon>backup</md-icon>
       </button>
     </td>
@@ -70,18 +71,45 @@
     <h2 md-dialog-title>Settings</h2>
     <span class="alert" *ngIf="settings.invalid">Please fill out all fields.</span>
     <form (ngSubmit)="saveSettings()" #settingsForm="ngForm" novalidate>
+
+      <h4 md-dialog-title>From Accounts</h4>
       <md-input-container class="wide">
         <input md-input type="text" [(ngModel)]="settings.apiUrl" name="apiUrl" placeholder="Instagram Authentication URL">
       </md-input-container>
       <md-input-container class="wide">
         <input md-input type="text" [(ngModel)]="settings.apiKey" name="apiKey" placeholder="Instagram API Key" readonly ngClass="{ actionable: !settings.apiKey}" tite="Authorize through Instagram" (focus)="switchToRedirect()">
       </md-input-container>
-      <md-input-container class="wide">
-        <input md-input type="text" [(ngModel)]="settings.fromAccounts" name="fromAccounts" placeholder="From Accounts">
-      </md-input-container>
-      <md-input-container class="wide">
-        <input md-input type="text" [(ngModel)]="settings.toAccounts" name="toAccounts" placeholder="To Accounts">
-      </md-input-container>
+      
+      <h4 md-dialog-title>From Accounts</h4>
+      <table class="wide">
+      <tr *ngFor="let account of settings.fromAccounts; let i = index; trackBy:trackByIndex">
+        <td>
+          <md-input-container class="wide">
+            <input md-input type="text" [(ngModel)]="settings.fromAccounts[i]" name="fromAccount_{{i}}" placeholder="Account Name">
+          </md-input-container>
+        </td>
+        <td class="button-cell"><button md-button type="button" (click)="removeAccount('from',i)"><md-icon>clear</md-icon></button></td>
+      </tr>
+      <tr>
+        <td colspan="2"><button md-button type="button" (click)="addAccount('from')"><md-icon>add</md-icon></button></td>
+      </tr>
+      </table>
+
+      <h4 md-dialog-title>To Accounts</h4>
+      <table class="wide">
+      <tr *ngFor="let account of settings.toAccounts; let i = index; trackBy:trackByIndex">
+        <td>
+          <md-input-container class="wide">
+            <input md-input type="text" [(ngModel)]="settings.toAccounts[i]" name="toAccount_{{i}}" placeholder="Account Name">
+          </md-input-container>
+        </td>
+        <td class="button-cell"><button md-button type="button" (click)="removeAccount('to',i)"><md-icon>clear</md-icon></button></td>
+      </tr>
+      <tr>
+        <td colspan="2"><button md-button type="button" (click)="addAccount('to')"><md-icon>add</md-icon></button></td>
+      </tr>
+      </table>
+
       <button md-icon-button color="primary" type="submit">
         <md-icon>save</md-icon>
       </button>

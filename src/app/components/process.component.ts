@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'angular2-cookie/core';
 import { HttpService } from '../services/http.service';
 
+import { AccountModel } from '../models/account.model';
 import { SettingsModel } from '../models/settings.model';
 import { LogMessageModel } from '../models/log-message.model';
 
@@ -39,11 +40,10 @@ export class ProcessComponent {
       this.getCookieAndParse('fromAccounts'),
       this.getCookieAndParse('toAccounts')
     );
-    if (!this.settings.fromAccounts || this.settings.fromAccounts.length <= 0) {
-      console.log('missing from accounts');
+    if (!this.isArrayValid(this.settings.fromAccounts)) {
       this.settings.fromAccounts = [''];
     }
-    if (!this.settings.toAccounts || this.settings.toAccounts.length <= 0) {
+    if (!this.isArrayValid(this.settings.toAccounts)) {
       this.settings.toAccounts = [''];
     }
     if (this.cookie.get('apiUrl')) {
@@ -57,7 +57,7 @@ export class ProcessComponent {
       }
       if (!this.settings.apiKey) {
         this.redirecting = true;
-      } else if (!this.settings.fromAccounts || !this.settings.toAccounts) {
+      } else if (!this.isArrayValid(this.settings.fromAccounts) || !this.isArrayValid(this.settings.toAccounts)) {
         this.settings.invalid = true;
         this.toggleConfiguration(true);
       }
@@ -114,16 +114,38 @@ export class ProcessComponent {
 
   private saveSettings() {
     this.setConfigurationDefaults();
-    if (this.settings.apiKey && this.settings.fromAccounts && this.settings.toAccounts) {
+    if (this.isSettingsValid()) {
+      console.log('saving settings');
+      this.cookie.put('apiUrl', this.settings.apiUrl);
       this.cookie.put('apiKey', this.settings.apiKey);
       this.cookie.put('fromAccounts', JSON.stringify(this.settings.fromAccounts));
       this.cookie.put('toAccounts', JSON.stringify(this.settings.toAccounts));
       this.toggleConfiguration(false);
       this.settings.invalid = false;
+      this.loading = false;
     } else {
       this.toggleConfiguration(true);
       this.settings.invalid = true;
+      this.loading = false;
     }
+  }
+
+  private isSettingsValid() {
+    if (this.settings.apiUrl 
+      && this.settings.apiKey 
+      && this.isArrayValid(this.settings.fromAccounts) 
+      && this.isArrayValid(this.settings.toAccounts)) {
+      return true;
+    }
+    return false;
+  }
+
+  private isArrayValid(array: Array<string>) {
+    console.log(array);
+    if (array && Array.isArray(array) && array.length > 0 && array[0] !== '') {
+      return true;
+    }
+    return false;
   }
 
   private setConfigurationDefaults() {
@@ -140,6 +162,36 @@ export class ProcessComponent {
 
   private processItem() {
 
+  }
+
+  private addAccount(what: string) {
+    switch(what) {
+      case 'to':
+        this.settings.toAccounts.push('');
+        break;
+      case 'from':
+        this.settings.fromAccounts.push('');
+        break;
+      default:
+        break;
+    }
+  }
+
+  private removeAccount(what: string, index: number) {
+    switch(what) {
+      case 'to':
+        this.settings.toAccounts.splice(index, 1);
+        break;
+      case 'from':
+        this.settings.fromAccounts.splice(index, 1);
+        break;
+      default:
+        break;
+    }
+  }
+
+  private trackByIndex(index: number, value: number) {
+    return index;
   }
 
   private log(message: string, classes: string = '') {
