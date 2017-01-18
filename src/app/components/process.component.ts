@@ -59,6 +59,9 @@ export class ProcessComponent {
   }
 
   private switchToRedirect() {
+    if (this.settings.apiKey) {
+      return;
+    }
     this.loading = true;
     setTimeout(() => {
       this.loading = false;

@@ -74,7 +74,7 @@
         <input md-input type="text" [(ngModel)]="settings.apiUrl" name="apiUrl" placeholder="Instagram Authentication URL">
       </md-input-container>
       <md-input-container class="wide">
-        <input md-input type="text" [(ngModel)]="settings.apiKey" name="apiKey" placeholder="Instagram API Key" readonly class="actionable" tite="Authorize through Instagram" (focus)="switchToRedirect()">
+        <input md-input type="text" [(ngModel)]="settings.apiKey" name="apiKey" placeholder="Instagram API Key" readonly ngClass="{ actionable: !settings.apiKey}" tite="Authorize through Instagram" (focus)="switchToRedirect()">
       </md-input-container>
       <md-input-container class="wide">
         <input md-input type="text" [(ngModel)]="settings.fromAccounts" name="fromAccounts" placeholder="From Accounts">
