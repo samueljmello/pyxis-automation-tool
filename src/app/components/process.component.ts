@@ -39,6 +39,13 @@ export class ProcessComponent {
       this.getCookieAndParse('fromAccounts'),
       this.getCookieAndParse('toAccounts')
     );
+    if (!this.settings.fromAccounts || this.settings.fromAccounts.length <= 0) {
+      console.log('missing from accounts');
+      this.settings.fromAccounts = [''];
+    }
+    if (!this.settings.toAccounts || this.settings.toAccounts.length <= 0) {
+      this.settings.toAccounts = [''];
+    }
     if (this.cookie.get('apiUrl')) {
       this.settings.apiUrl = this.cookie.get('apiUrl');
     }
@@ -46,6 +53,7 @@ export class ProcessComponent {
     this.route.queryParams.subscribe((data) => {
       if (!this.settings.apiKey && data !== undefined && data['code'] !== undefined) {
         this.settings.apiKey = data['code'];
+        this.cookie.put('apiKey', data['code']);
       }
       if (!this.settings.apiKey) {
         this.redirecting = true;

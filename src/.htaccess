@@ -1,0 +1,39 @@
+RewriteEngine on
+
+ # Don't rewrite files or directories
+ RewriteCond %{REQUEST_FILENAME} -f [OR]
+ RewriteCond %{REQUEST_FILENAME} -d
+ RewriteRule ^ - [L]
+# Dont' cache html
+<filesMatch "\.(html|htm)$">
+  FileETag None
+  <ifModule mod_headers.c>
+     Header unset ETag
+     Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+     Header set Pragma "no-cache"
+     Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+  </ifModule>
+</filesMatch>
+
+# Don't allow directory listing
+Options -Indexes
+
+# Prevent accessing .conf files
+<Files ~ "\.(conf)$">
+  Deny from all
+</Files>
+
+ # Redirect http://www. to just http://
+ RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+ RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+ RewriteCond %{QUERY_STRING} ^_escaped_fragment_=
+ RewriteCond %{HTTP_HOST}  ^touchtyping.guru [NC]
+ RewriteRule ^ snapshots%{REQUEST_URI}-en.html [L]
+
+ RewriteCond %{QUERY_STRING} ^_escaped_fragment_=
+ RewriteCond %{HTTP_HOST}  ^(es|pl|en).touchtyping.guru [NC]
+ RewriteRule ^ snapshots%{REQUEST_URI}-%1.html [L]
+
+ # Rewrite everything else to index.html to allow html5 state links
+ RewriteRule ^ index.html [QSA,L]
