@@ -9,18 +9,16 @@ export class HttpService {
 
   constructor(private http: Http) {}
 
-  public getRss(url: string): Observable<any> {
-    let headers = new Headers();
-    headers.append('Accept', 'application/xml');
-    return this.http.get(url, { headers: headers })
+  public get(url: string): Observable<any> {
+    return this.http.get(url)
       .map(this.extractData)
       .catch(this.handleError);
   };
 
-  public getMP3(url: string): Observable<any> {
+  public post(url: string, data: any): Observable<any> {
     let headers = new Headers();
-    headers.append('Accept', 'audio/mp3');
-    return this.http.get(url, { headers: headers })
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(url, data, { headers: headers })
       .map(this.extractData)
       .catch(this.handleError);
   };

@@ -67,11 +67,43 @@ body {
   color: #900;
 }
 .progress-bar, .h-pad {
-  margin: 20px 0;
+  margin: 20px 0 !important;
 }
 .actionable {
   cursor: pointer;
 }
 .button-cell {
-  width: 88px;
+  width: 24px;
+}
+
+[md-micro-fab][md-mini-fab] {
+  width: 20px;
+  height: 20px;
+  line-height: 26px;
+
+  md-icon {
+    line-height: 9px;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    &.material-icons {
+      font-size: 15px;
+    }
+  }
+}
+
+[md-small-fab][md-mini-fab] {
+  width: 30px;
+  height: 30px;
+  line-height: 40px;
+
+  md-icon {
+    line-height: 19px;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    &.material-icons {
+      font-size: 20px;
+    }
+  }
 }

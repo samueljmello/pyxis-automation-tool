@@ -1,9 +1,10 @@
-import { AccountModel } from '../models/account.model';
-
 export class SettingsModel {
   public fromAccounts: Array<string> = new Array();
   public apiKey: string = '';
-  public apiUrl: string = 'https://api.instagram.com/oauth/authorize/';
+  public apiUser: any;
+  public apiUrl: string = 'https://api.instagram.com/v1/';
+  public authUrl: string = 'https://api.instagram.com/oauth/authorize/';
+  public tokenUrl: string = 'https://api.instagram.com/oauth/access_token/';
   public toAccounts: Array<string> = new Array();
   public invalid: boolean = false;
   public constructor(

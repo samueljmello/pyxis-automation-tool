@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'angular2-cookie/core';
 import { HttpService } from '../services/http.service';
 
-import { AccountModel } from '../models/account.model';
 import { SettingsModel } from '../models/settings.model';
 import { LogMessageModel } from '../models/log-message.model';
 
@@ -19,6 +18,9 @@ export class ProcessComponent {
   private configuration: boolean = false;
   private processing: boolean = false;
   private redirecting: boolean = false;
+  private error: boolean = false;
+  private errorMessage: string = '';
+  private code: string = '';
 
   private settings: SettingsModel = new SettingsModel();
 
@@ -46,14 +48,24 @@ export class ProcessComponent {
     if (!this.isArrayValid(this.settings.toAccounts)) {
       this.settings.toAccounts = [''];
     }
+    if (this.cookie.get('authUrl')) {
+      this.settings.authUrl = this.cookie.get('authUrl');
+    }
     if (this.cookie.get('apiUrl')) {
       this.settings.apiUrl = this.cookie.get('apiUrl');
     }
-
+    if (this.cookie.get('tokenUrl')) {
+      this.settings.tokenUrl = this.cookie.get('tokenUrl');
+    }
     this.route.queryParams.subscribe((data) => {
       if (!this.settings.apiKey && data !== undefined && data['code'] !== undefined) {
-        this.settings.apiKey = data['code'];
-        this.cookie.put('apiKey', data['code']);
+        this.code = data['code'];
+        this.processRedirect(2);
+        // this.settings.apiKey = data['code'];
+        // this.cookie.put('apiKey', data['code']);
+      } else if (!this.settings.apiKey && data !== undefined && data['error'] !== undefined) {
+        this.error = true;
+        this.errorMessage = data['error'];
       }
       if (!this.settings.apiKey) {
         this.redirecting = true;
@@ -67,9 +79,6 @@ export class ProcessComponent {
   }
 
   private switchToRedirect() {
-    if (this.settings.apiKey) {
-      return;
-    }
     this.loading = true;
     setTimeout(() => {
       this.loading = false;
@@ -79,12 +88,31 @@ export class ProcessComponent {
   }
 
   private processRedirect(task: number) {
+    const cId = process.env.PYXIS_INSTAGRAM_CLIENT_ID;
+    const cSecret = process.env.PYXIS_INSTAGRAM_CLIENT_SECRET;
+    const rUrl = encodeURI(process.env.PYXIS_INSTAGRAM_REDIRECT_URL);
+    const code = this.code;
     switch(task) {
       default:
       case 1:
-        const cId = process.env.PYXIS_INSTAGRAM_CLIENT_ID;
-        const rUrl = encodeURI(process.env.PYXIS_INSTAGRAM_REDIRECT_URL);
-        window.location.href = this.settings.apiUrl + `?client_id=${cId}&redirect_uri=${rUrl}&response_type=code`;
+        window.location.href = this.settings.authUrl + `?client_id=${cId}&redirect_uri=${rUrl}&response_type=code`;
+        break;
+      case 2:
+        this.http.post(this.settings.tokenUrl, {
+          client_id: cId,
+          client_secret: cSecret,
+          code: code,
+          redirect_uri: rUrl,
+          grant_type: 'authorization_code'
+
+        }).subscribe(
+          (response) => {
+            console.log('success');
+          },
+          (error) => {
+            console.log('error');
+          }
+        );
         break;
       case 0:
         this.redirecting = false;
@@ -103,8 +131,13 @@ export class ProcessComponent {
   private toggleConfiguration(which: boolean = undefined) {
     if (which !== undefined) {
       this.configuration = which;
+      this.redirecting = !which;
     } else {
       this.configuration = !this.configuration;
+      this.redirecting = !this.redirecting;
+    }
+    if (!this.configuration) {
+      this.doSave();
     }
   }
 
@@ -114,12 +147,8 @@ export class ProcessComponent {
 
   private saveSettings() {
     this.setConfigurationDefaults();
+    this.doSave();
     if (this.isSettingsValid()) {
-      console.log('saving settings');
-      this.cookie.put('apiUrl', this.settings.apiUrl);
-      this.cookie.put('apiKey', this.settings.apiKey);
-      this.cookie.put('fromAccounts', JSON.stringify(this.settings.fromAccounts));
-      this.cookie.put('toAccounts', JSON.stringify(this.settings.toAccounts));
       this.toggleConfiguration(false);
       this.settings.invalid = false;
       this.loading = false;
@@ -130,9 +159,31 @@ export class ProcessComponent {
     }
   }
 
+  private doSave() {
+    this.cookie.put('apiUrl', this.settings.apiUrl);
+    this.cookie.put('authUrl', this.settings.authUrl);
+    this.cookie.put('tokenUrl', this.settings.tokenUrl);
+    this.cookie.put('apiKey', this.settings.apiKey);
+    this.cookie.put('fromAccounts', JSON.stringify(this.settings.fromAccounts));
+    this.cookie.put('toAccounts', JSON.stringify(this.settings.toAccounts));
+    for (let i = 0; i < this.settings.fromAccounts.length; i++) {
+      this.settings.fromAccounts[i] = this.settings.fromAccounts[i].trim();
+      if (this.settings.fromAccounts[i] === '') {
+        this.settings.fromAccounts.splice(i,1);
+      }
+    }
+    for (let i = 0; i < this.settings.toAccounts.length; i++) {
+      this.settings.toAccounts[i] = this.settings.toAccounts[i].trim();
+      if (this.settings.toAccounts[i] === '') {
+        this.settings.toAccounts.splice(i,1);
+      }
+    }
+  }
+
   private isSettingsValid() {
-    if (this.settings.apiUrl 
-      && this.settings.apiKey 
+    if (this.settings.apiUrl
+      && this.settings.authUrl
+      && this.settings.tokenUrl
       && this.isArrayValid(this.settings.fromAccounts) 
       && this.isArrayValid(this.settings.toAccounts)) {
       return true;
@@ -141,7 +192,6 @@ export class ProcessComponent {
   }
 
   private isArrayValid(array: Array<string>) {
-    console.log(array);
     if (array && Array.isArray(array) && array.length > 0 && array[0] !== '') {
       return true;
     }
