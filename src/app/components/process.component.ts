@@ -89,7 +89,6 @@ export class ProcessComponent {
 
   private processRedirect(task: number) {
     const cId = process.env.PYXIS_INSTAGRAM_CLIENT_ID;
-    const cSecret = process.env.PYXIS_INSTAGRAM_CLIENT_SECRET;
     const rUrl = encodeURI(process.env.PYXIS_INSTAGRAM_REDIRECT_URL);
     const code = this.code;
     switch(task) {
@@ -100,14 +99,11 @@ export class ProcessComponent {
       case 2:
         this.http.post(this.settings.tokenUrl, {
           client_id: cId,
-          client_secret: cSecret,
           code: code,
-          redirect_uri: rUrl,
-          grant_type: 'authorization_code'
-
+          redirect_uri: rUrl
         }).subscribe(
           (response) => {
-            console.log('success');
+            console.log(response);
           },
           (error) => {
             console.log('error');
