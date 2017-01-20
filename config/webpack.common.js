@@ -72,6 +72,10 @@ module.exports = {
       {
         from: './src/.htaccess',
         to: ''
+      },
+      {
+        from: './backend',
+        to: ''
       }
     ])
   ]

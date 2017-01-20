@@ -14,9 +14,14 @@ final class InstagramRelay {
     private $missing = Array();
 
     public function __construct() {
-    
-        header('Content-Type: application/json');
+        
+        error_reporting(0);
+        ini_set('display_errors', 0);
+
         header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Credentials: true ");
+        header("Access-Control-Allow-Methods: OPTIONS, GET, POST");
+        header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control");
 
         $loaded = $this->loadParams();
         if ($loaded) {
@@ -30,28 +35,33 @@ final class InstagramRelay {
     private function loadParams() {
 
         $this->client_secret = INSTAGRAM_SECRET_KEY;
+        
+        $json = file_get_contents('php://input');
+        $post = json_decode($json);
 
-        $post = json_decode($_POST['json']);
+        if ($post) {
+            if (property_exists($post,'client_id')) {
+                $this->client_id = $post->client_id;
+                array_push($this->loaded, 'client_id');
+            } else {
+                array_push($this->missing, 'client_id');
+            }
 
-        if (property_exists($post,'client_id')) {
-            $this->client_id = $post->client_id;
-            array_push($this->loaded, 'client_id');
+            if (property_exists($post,'code')) {
+                $this->code = $post->code;
+                array_push($this->loaded, 'code');
+            } else {
+                array_push($this->missing, 'code');
+            }
+
+            if (property_exists($post,'redirect_uri')) {
+                $this->redirect_uri = $post->redirect_uri;
+                array_push($this->loaded, 'redirect_uri');
+            } else {
+                array_push($this->missing, 'redirect_uri');
+            }
         } else {
-            array_push($this->missing, 'client_id');
-        }
-
-        if (property_exists($post,'code')) {
-            $this->code = $post->code;
-            array_push($this->loaded, 'code');
-        } else {
-            array_push($this->missing, 'code');
-        }
-
-        if (property_exists($post,'redirect_uri')) {
-            $this->redirect_uri = $post->redirect_uri;
-            array_push($this->loaded, 'redirect_uri');
-        } else {
-            array_push($this->missing, 'redirect_uri');
+            array_push($this->missing, 'client_id', 'code', 'redirect_uri');
         }
 
         if (count($this->loaded) === 3) {
@@ -82,7 +92,7 @@ final class InstagramRelay {
 
         if (!curl_error($curl)) {
             header("HTTP/1.1 200 OK");
-            $data = $result;
+            $data = json_decode($result);
         } else {
             header("HTTP/1.1 500 Server Error");
             $data = Array('message' => 'Instagram Response Error: ' . curl_error($curl));

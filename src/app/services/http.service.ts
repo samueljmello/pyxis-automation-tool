@@ -17,8 +17,7 @@ export class HttpService {
 
   public post(url: string, data: any): Observable<any> {
     let headers = new Headers();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post(url, 'json=' + JSON.stringify(data), { headers: headers })
+    return this.http.post(url, JSON.stringify(data), { headers: headers })
       .map(this.extractData)
       .catch(this.handleError);
   };

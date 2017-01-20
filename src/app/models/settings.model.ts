@@ -4,7 +4,7 @@ export class SettingsModel {
   public apiUser: any;
   public apiUrl: string = 'https://api.instagram.com/v1/';
   public authUrl: string = 'https://api.instagram.com/oauth/authorize/';
-  public tokenUrl: string = 'https://api.instagram.com/oauth/access_token/';
+  public tokenUrl: string = 'http://localhost:3000/api.php';
   public toAccounts: Array<string> = new Array();
   public invalid: boolean = false;
   public constructor(

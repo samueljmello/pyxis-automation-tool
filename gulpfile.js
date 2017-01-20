@@ -2,17 +2,16 @@ var gulp = require('gulp');
 var connect = require('gulp-connect-php');
 var browserSync = require('browser-sync');
  
-gulp.task('connect-sync', function() {
+gulp.task('default', function() {
   connect.server({
-      base: './backend'
+      base: './dist'
   }, function (){
     browserSync({
-      proxy: '127.0.0.1:8000',
-      base: './backend'
+      proxy: '127.0.0.1:8000'
     });
   });
  
-  gulp.watch('./backend/**/*.php').on('change', function () {
+  gulp.watch('./dist/**/*').on('change', function () {
     browserSync.reload();
   });
 });
