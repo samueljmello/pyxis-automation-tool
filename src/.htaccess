@@ -23,17 +23,5 @@ Options -Indexes
   Deny from all
 </Files>
 
- # Redirect http://www. to just http://
- RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
- RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
-
- RewriteCond %{QUERY_STRING} ^_escaped_fragment_=
- RewriteCond %{HTTP_HOST}  ^touchtyping.guru [NC]
- RewriteRule ^ snapshots%{REQUEST_URI}-en.html [L]
-
- RewriteCond %{QUERY_STRING} ^_escaped_fragment_=
- RewriteCond %{HTTP_HOST}  ^(es|pl|en).touchtyping.guru [NC]
- RewriteRule ^ snapshots%{REQUEST_URI}-%1.html [L]
-
  # Rewrite everything else to index.html to allow html5 state links
  RewriteRule ^ index.html [QSA,L]
