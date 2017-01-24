@@ -1,1 +1,22 @@
+<md-toolbar color="primary">
+  <span>
+    <button md-button (click)="state.goTo('process');">
+      <span>&nbsp;Pyxis Automation Tool</span>
+    </button>
+  </span>
+  <span style="flex: 1 1 auto;">&nbsp;</span>
+  <span>
+    <button md-icon-button (click)="state.goTo('process');" title="Process Feed">
+      <md-icon>swap_vert</md-icon>
+    </button>
+    <button md-icon-button (click)="state.goTo('configure')" title="Edit Settings">
+      <md-icon>perm_data_settings</md-icon>
+    </button>
+  </span>
+</md-toolbar>
+<div id="loading" *ngIf="state.loading">
+  <div class="container">
+    <md-spinner></md-spinner>
+  </div>
+</div>
 <router-outlet></router-outlet>

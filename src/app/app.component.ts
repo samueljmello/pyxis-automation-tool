@@ -1,4 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { StateService } from './services/state.service';
 
 @Component({
   selector: 'app',
@@ -6,4 +9,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./app.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class AppComponent {}
+export class AppComponent {
+
+  constructor(private state: StateService, private router: Router) {}
+
+}

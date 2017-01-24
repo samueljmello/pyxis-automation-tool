@@ -3,12 +3,18 @@ import { MaterialModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule }  from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { JsonpModule } from '@angular/http';
+
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { AppComponent } from './app.component';
+import { AuthorizeComponent } from './components/authorize.component';
+import { ConfigureComponent } from './components/configure.component';
 import { ProcessComponent } from './components/process.component';
 
-import { HttpService } from './services/http.service';
-import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { InstagramService } from './services/instagram.service';
+import { StateService } from './services/state.service';
+
 import { AppRouting, AppRoutingProviders } from './app.routing';
 
 @NgModule({
@@ -16,16 +22,20 @@ import { AppRouting, AppRoutingProviders } from './app.routing';
     BrowserModule,
     MaterialModule.forRoot(),
     FormsModule,
+    JsonpModule,
     RouterModule.forRoot(AppRouting)
   ],
   declarations: [
     AppComponent,
+    AuthorizeComponent,
+    ConfigureComponent,
     ProcessComponent
   ],
   providers: [
     AppRoutingProviders,
-    HttpService,
-    CookieService
+    CookieService,
+    InstagramService,
+    StateService,
   ],
   bootstrap: [ AppComponent ]
 })

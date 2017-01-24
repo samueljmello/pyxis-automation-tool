@@ -9,7 +9,7 @@
     "url": "git://github.com/samueljmello/pyxis-automation-tool.git"
   },
   "scripts": {
-    "start": "rimraf dist && webpack --progress --profile --bail && gulp",
+    "start": "webpack-dev-server --inline --open --progress --port 3000",
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
     "deploy": "npm run build && node ftp.js",
     "ftp": "node ftp.js"

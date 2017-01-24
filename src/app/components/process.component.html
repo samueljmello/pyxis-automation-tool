@@ -1,36 +1,12 @@
-<md-toolbar color="primary">
-  <span>
-    <button md-button>
-      <md-icon>track_changes</md-icon>  
-      <span>&nbsp;Pyxis Automation Tool</span>
-    </button>
-  </span>
-  <span style="flex: 1 1 auto;">&nbsp;</span>
-  <span>
-    <button md-icon-button (click)="refreshFeed()" title="Refresh Feed">
-      <md-icon>autorenew</md-icon>
-    </button>
-    <button md-icon-button (click)="toggleConfiguration()" title="Edit Settings">
-      <md-icon>settings_ethernet</md-icon>
-    </button>
-  </span>
-</md-toolbar>
-<div id="loading" *ngIf="loading">
-  <div class="container">
-    <md-spinner></md-spinner>
-  </div>
-</div>
 <div id="content">
-  <div id="feed" *ngIf="!configuration && !redirecting">
+  <div id="feed">
     <table class="header-table wide">
     <tr>
     <td>
-      <h2 md-dialog-title *ngIf="settings.invalid" class="notice">Please set up your API connection and accounts.</h2>
-      <h2 md-dialog-title *ngIf="!settings.invalid" class="notice">Posts To Process</h2>
-      <h2 md-dialog-title *ngIf="error" class="notice">{{ errorMessage }}</h2>
+      <h2 md-dialog-title class="notice">Feed To Re-Post</h2>
     </td>
     <td>
-      <button md-mini-fab *ngIf="!settings.invalid" (click)="processFeed()" title="Start Feed Repost" [disabled]="processing">
+      <button md-mini-fab (click)="start()" title="Start Feed Repost">
         <md-icon>backup</md-icon>
       </button>
     </td>
@@ -59,77 +35,5 @@
       </md-list>
     </div>
     !-->
-  </div>
-  <div id="redirect" *ngIf="redirecting && !configuration">
-      <h1 md-dialog-title>Redirecting to Instagram</h1>
-      <div md-dialog-content>This application is about to redirect to Instagram for API authentication. Do you wish to do this now?</div>
-      <div md-dialog-actions class="h-pad">
-        <button md-raised-button color="primary" active (click)="processRedirect(1)">Yes</button>
-        <button md-raised-button color="warn" (click)="processRedirect(0)">No</button>
-      </div>
-  </div>
-  <div id="configuration" *ngIf="configuration && !redirecting">
-    <h2 md-dialog-title>Settings</h2>
-    <span class="alert" *ngIf="settings.invalid">Please fill out all fields.</span>
-    <form (ngSubmit)="saveSettings()" #settingsForm="ngForm" novalidate>
-
-      <h4 md-dialog-title>API Settings</h4>
-      <md-input-container class="wide">
-        <input md-input type="text" [(ngModel)]="settings.apiUrl" name="apiUrl" placeholder="Instagram API URL">
-      </md-input-container>
-      <md-input-container class="wide">
-        <input md-input type="text" [(ngModel)]="settings.authUrl" name="authUrl" placeholder="Instagram Authentication Endpoint">
-      </md-input-container>
-      <md-input-container class="wide">
-        <input md-input type="text" [(ngModel)]="settings.tokenUrl" name="tokenUrl" placeholder="Instagram Token Endpoint">
-      </md-input-container>
-      <md-input-container class="wide">
-        <input md-input type="text" [(ngModel)]="settings.apiKey" name="apiKey" placeholder="Instagram API Key (click to generate)" readonly class="actionable" tite="Authorize through Instagram" (focus)="switchToRedirect()">
-      </md-input-container>
-      
-      <h4 md-dialog-title>From Accounts</h4>
-      <table class="wide">
-      <tr *ngFor="let account of settings.fromAccounts; let i = index; trackBy:trackByIndex">
-        <td class="button-cell">
-          <button md-mini-fab md-micro-fab type="button" color="warn" (click)="removeAccount('from',i)" title="Remove Acccount"><md-icon>clear</md-icon></button>
-        </td>
-        <td>
-          <md-input-container class="wide">
-            <input md-input type="text" [(ngModel)]="settings.fromAccounts[i]" name="fromAccount_{{i}}" placeholder="Account Name">
-          </md-input-container>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <button md-mini-fab md-micro-fab type="button" color="accent" (click)="addAccount('from')" title="Add New Acccount">
-            <md-icon>add</md-icon>
-          </button>
-        </td>
-      </tr>
-      </table>
-
-      <h4 md-dialog-title>To Accounts</h4>
-      <table class="wide">
-      <tr *ngFor="let account of settings.toAccounts; let i = index; trackBy:trackByIndex">
-        <td class="button-cell">
-          <button md-mini-fab md-micro-fab color="warn" type="button" (click)="removeAccount('to',i)" title="Remove Acccount"><md-icon>clear</md-icon></button>
-        </td>
-        <td>
-          <md-input-container class="wide">
-            <input md-input type="text" [(ngModel)]="settings.toAccounts[i]" name="toAccount_{{i}}" placeholder="Account Name">
-          </md-input-container>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <button md-mini-fab md-micro-fab color="accent" type="button" (click)="addAccount('to')" title="Add New Acccount">
-            <md-icon>add</md-icon>
-          </button>
-        </td>
-      </tr>
-      </table>
-
-      <button class="h-pad" md-raised-button color="primary" type="submit">Close</button>
-    </form>
   </div>
 </div>
