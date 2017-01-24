@@ -12,6 +12,9 @@
     <button md-icon-button (click)="state.goTo('configure')" title="Edit Settings">
       <md-icon>perm_data_settings</md-icon>
     </button>
+    <button md-icon-button (click)="state.goTo('privacy')" title="Privacy Policy">
+      <md-icon>error_outline</md-icon>
+    </button>
   </span>
 </md-toolbar>
 <div id="loading" *ngIf="state.loading">

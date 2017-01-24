@@ -16,7 +16,7 @@
         <input md-input type="text" [(ngModel)]="settings.redirectUrl" name="redirectUrl" placeholder="Redirect URL">
       </md-input-container>
 
-      <h4 md-dialog-title>Instagram Settings</h4>
+      <h4 md-dialog-title>Connect Instagram Account</h4>
       <div>
         <button md-mini-fab type="button" color="primary" *ngIf="!settings.apiKey" (click)="authorize();" title="Authorize Account">
           <md-icon>fingerprint</md-icon>

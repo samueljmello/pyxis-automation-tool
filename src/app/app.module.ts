@@ -10,6 +10,7 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { AppComponent } from './app.component';
 import { AuthorizeComponent } from './components/authorize.component';
 import { ConfigureComponent } from './components/configure.component';
+import { PrivacyComponent } from './components/privacy.component';
 import { ProcessComponent } from './components/process.component';
 
 import { InstagramService } from './services/instagram.service';
@@ -29,6 +30,7 @@ import { AppRouting, AppRoutingProviders } from './app.routing';
     AppComponent,
     AuthorizeComponent,
     ConfigureComponent,
+    PrivacyComponent,
     ProcessComponent
   ],
   providers: [

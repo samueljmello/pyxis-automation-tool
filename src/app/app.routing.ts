@@ -4,6 +4,7 @@ import { Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AuthorizeComponent } from './components/authorize.component';
 import { ConfigureComponent } from './components/configure.component';
+import { PrivacyComponent } from './components/privacy.component';
 import { ProcessComponent } from './components/process.component';
 
 export const AppRouting: Routes = [
@@ -33,6 +34,13 @@ export const AppRouting: Routes = [
     component: AuthorizeComponent,
     data: {
       title: 'Authorize Client'
+    }
+  },
+  {
+    path: 'privacy',
+    component: PrivacyComponent,
+    data: {
+      title: 'Privacy Policy'
     }
   }
 ];
