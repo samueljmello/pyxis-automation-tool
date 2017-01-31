@@ -6,6 +6,7 @@ export class MediaModel {
   public image: string;
   public link: string;
   public date: string;
+  public include: boolean = true;
 
   constructor(objectToMap: any) {
     this.object = objectToMap;

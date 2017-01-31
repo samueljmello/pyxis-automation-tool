@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { CookieService } from 'angular2-cookie/core';
 
+import { MediaModel } from '../models/media.model';
 import { SettingsModel } from '../models/settings.model';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class StateService {
   public errorMessage: string = '';
   public loading: boolean = true;
   public settings: SettingsModel = new SettingsModel();
+  public feed: Array<MediaModel>;
 
   constructor(
     private activatedRoute: ActivatedRoute,

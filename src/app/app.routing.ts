@@ -6,6 +6,7 @@ import { AuthorizeComponent } from './components/authorize.component';
 import { ConfigureComponent } from './components/configure.component';
 import { PrivacyComponent } from './components/privacy.component';
 import { ProcessComponent } from './components/process.component';
+import { ResultsComponent } from './components/results.component';
 
 export const AppRouting: Routes = [
   {
@@ -34,6 +35,13 @@ export const AppRouting: Routes = [
     component: AuthorizeComponent,
     data: {
       title: 'Authorize Client'
+    }
+  },
+  {
+    path: 'results',
+    component: ResultsComponent,
+    data: {
+      title: 'Process Results'
     }
   },
   {

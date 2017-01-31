@@ -1,18 +1,23 @@
 <div id="content">
   <div id="feed">
-    <table class="header-table wide">
-    <tr>
-    <td>
-      <h2 md-dialog-title class="notice">Feed To Re-Post</h2>
-    </td>
-    <td>
-      <button md-mini-fab (click)="start()" title="Start Feed Repost">
-        <md-icon>backup</md-icon>
-      </button>
-    </td>
-    </tr>
-    </table>
 
+    <div class="header-table wide">
+      <h2 md-dialog-title class="notice">Feed To Re-Post</h2>
+    </div>
+    
+    <md-list>
+      <md-list-item>
+        <div>
+          <button md-mini-fab (click)="start()" title="Start Feed Repost">
+            <md-icon>backup</md-icon>
+          </button>
+          <button md-mini-fab (click)="preload()" title="Refresh Feed">
+            <md-icon>refresh</md-icon>
+          </button>  
+        </div>
+        <md-checkbox class="checkbox-solo" checked="checked" (click)="toggleMedia();"></md-checkbox>
+      </md-list-item>
+    </md-list>
     <md-list *ngIf="feed && feed.length > 0">
       <md-list-item *ngFor="let post of feed; let i = index;">
         <img md-list-avatar [src]="post.image">
@@ -21,20 +26,9 @@
           <span><a [href]="post.link" target="_BLANK">{{ post.link }}</a></span>
         </p>
         <p md-line>{{ post.date | date:'medium' }}</p>
+        <md-checkbox checked="checked" [(ngModel)]="post.include"></md-checkbox>
       </md-list-item>
     </md-list>
-
-    <!--
-    <div *ngIf="rssFeed && processing">
-      <md-progress-bar class="progress-bar" [attr.color]="processColor" mode="determinate" [value]="processProgress">
-      </md-progress-bar>
-      <md-list class="log-items">
-        <md-list-item *ngFor="let logItem of processLog">
-          <h3 [ngClass]="logItem.classes" md-line>{{logItem.message}}</h3>
-        </md-list-item>
-      </md-list>
-    </div>
-    !-->
     
   </div>
 </div>

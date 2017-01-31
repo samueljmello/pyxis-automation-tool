@@ -14,7 +14,8 @@ import { SettingsModel } from '../models/settings.model';
 })
 export class ProcessComponent implements OnInit {
 
-  private feed: Array<any> = new Array();
+  private feed: Array<any>;
+  private all: boolean = true;
 
   constructor(
     private cookie: CookieService,
@@ -31,6 +32,8 @@ export class ProcessComponent implements OnInit {
   }
 
   private preload() {
+    this.state.loading = true;
+    this.feed = new Array();
     let accountsToQuery: Array<AccountModel>;
     if (this.state.settings.valid()) {
       accountsToQuery = this.state.settings.fromAccounts.slice();
@@ -46,8 +49,7 @@ export class ProcessComponent implements OnInit {
     this.instagram.getMedia(accounts[0].id, accounts[0].token).subscribe(
       (response) => {
         for (let i = 0; i < response.data.length; i++) {
-          console.log(response.data[i]);
-          this.feed.push(new MediaModel(response.data[i]));
+          this.feed.unshift(new MediaModel(response.data[i]));
         }
       },
       (error) => {},
@@ -58,7 +60,18 @@ export class ProcessComponent implements OnInit {
     );
   }
 
-  private start() {
+  private toggleMedia() {
+    this.state.loading = true;
+    const include = this.all = !this.all;
+    for (let i = 0; i < this.feed.length; i++) {
+      this.feed[i].include = include;
+    }
     this.state.loading = false;
+  }
+
+  private start() {
+    this.state.loading = true;
+    this.state.feed = this.feed;
+    this.state.goTo('results');
   }
 }

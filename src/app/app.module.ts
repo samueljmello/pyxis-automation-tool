@@ -12,6 +12,7 @@ import { AuthorizeComponent } from './components/authorize.component';
 import { ConfigureComponent } from './components/configure.component';
 import { PrivacyComponent } from './components/privacy.component';
 import { ProcessComponent } from './components/process.component';
+import { ResultsComponent } from './components/results.component';
 
 import { InstagramService } from './services/instagram.service';
 import { StateService } from './services/state.service';
@@ -31,7 +32,8 @@ import { AppRouting, AppRoutingProviders } from './app.routing';
     AuthorizeComponent,
     ConfigureComponent,
     PrivacyComponent,
-    ProcessComponent
+    ProcessComponent,
+    ResultsComponent
   ],
   providers: [
     AppRoutingProviders,
