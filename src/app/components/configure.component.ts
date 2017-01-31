@@ -7,7 +7,6 @@ import { InstagramService } from '../services/instagram.service';
 import { StateService } from '../services/state.service';
 
 import { SettingsModel } from '../models/settings.model';
-import { LogMessageModel } from '../models/log-message.model';
 
 @Component({
   selector: 'configure-component',
@@ -15,12 +14,7 @@ import { LogMessageModel } from '../models/log-message.model';
 })
 export class ConfigureComponent implements OnInit {
 
-  private error: boolean = false;
-  private errorMessage: string = '';
   private settings: SettingsModel = new SettingsModel();
-
-  private userFullName: string = '';
-  private userCache: Array<string>;
 
   constructor(
     private cookie: CookieService,
@@ -31,90 +25,43 @@ export class ConfigureComponent implements OnInit {
 
   public ngOnInit() {
     this.settings = this.state.settings;
-    if (this.settings.apiUrl && this.settings.apiKey) {
-      this.instagram.setup(this.settings.apiUrl, this.settings.apiKey);
-      this.instagram.getSelf().subscribe(
-        (response) => {
-          this.userFullName = `${response.data.full_name} (${response.data.username})`;
-          this.loadAccounts();
-          this.state.loading = false;
-        },
-        (error) => {
-          this.error = true;
-          this.errorMessage = 'Error connecting Instagram account.';
-          this.deauthorize();
-          this.state.loading = false;
-        }
-      );
-    } else {
-      this.state.loading = false;
-    }
-  }
-
-  private loadAccounts() {
-    this.userCache = this.settings.fromAccounts.slice();
-    this.loadAccount();
-  }
-
-  private loadAccount() {
-    if (this.userCache.length <= 0 ) {
-      return;
-    }
-    this.instagram.getSearch(this.userCache[0]).subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        this.userCache.splice(0);
-        this.loadAccount();
-      }
-    );
+    this.state.loading = false;
   }
 
   private save() {
     this.state.loading = true;
-    this.cleanAccounts();
+    this.state.save(this.settings);
+    this.instagram.setup(this.settings.apiUrl);
     if (this.settings.valid()) {
-      this.error = false;
-      this.state.save(this.settings);
-      this.instagram.setup(this.settings.apiUrl, this.settings.apiKey);
+      this.state.error = false;
       this.state.goTo('process');
     } else {
-      this.error = true;
-      this.errorMessage = 'Please configure all settings correctly.';
+      this.state.error = true;
+      this.state.errorMessage = this.settings.errorDetails();
       this.state.loading = false;
     }
   }
 
-  private cleanAccounts() {
-    for (let i = 0; i < this.settings.fromAccounts.length; i++) {
-      this.settings.fromAccounts[i] = this.settings.fromAccounts[i].trim();
-      if (this.settings.fromAccounts[i] === '') {
-        this.settings.fromAccounts.splice(i, 1);
-      }
-    }
-    for (let i = 0; i < this.settings.toAccounts.length; i++) {
-      this.settings.toAccounts[i] = this.settings.toAccounts[i].trim();
-      if (this.settings.toAccounts[i] === '') {
-        this.settings.toAccounts.splice(i, 1);
-      }
-    }
+  private trackByIndex(index: number, value: number) {
+    return index;
+  }
+
+  private authorize() {
+    let logout = window.open(
+      'https://www.instagram.com/accounts/logout',
+      'logout',
+      this.createWindowProperties()
+    );
+    self.focus();
+    setTimeout(() => {
+      logout.close();
+      window.location.href = this.authorizationUrl();
+    }, 2000);
   }
 
   private addAccount(what: string) {
-    switch(what) {
-      case 'to':
-        this.settings.toAccounts.push('');
-        break;
-      case 'from':
-        this.settings.fromAccounts.push('');
-        break;
-      default:
-        break;
-    }
+    this.cookie.put('authArray', what);
+    this.authorize();
   }
 
   private removeAccount(what: string, index: number) {
@@ -130,18 +77,33 @@ export class ConfigureComponent implements OnInit {
     }
   }
 
-  private trackByIndex(index: number, value: number) {
-    return index;
-  }
-
-  private authorize() {
+  private authorizationUrl(): string {
     const clientId = this.state.clientId;
     const redirectUrl = encodeURI(this.settings.redirectUrl);
-    window.location.href = this.settings.authUrl + `?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=token&scope=public_content`;
+    let authUrl = this.settings.authUrl;
+    authUrl += `?client_id=${clientId}`;
+    authUrl += `&redirect_uri=${redirectUrl}`;
+    authUrl += `&response_type=token`;
+    authUrl += `&scope=public_content`;
+    return authUrl;
   }
 
-  private deauthorize() {
-    this.settings.apiKey = '';
-    this.cookie.remove('apiKey');
+  private createWindowProperties(): string {
+    const x = Math.round(window.screen.availWidth / 2);
+    const y = Math.round(window.screen.availHeight / 2);
+    const props = [
+      'titlebar',
+      'menubar',
+      'status',
+      'toolbar',
+      'resizable',
+      'menubar',
+      'location',
+    ]
+    let propString = `width=100,height=100,left=${x},top=${y}`;
+    for (let i = 0; i < props.length; i++) {
+      propString += `,${props[i]}=no`;
+    }
+    return propString;
   }
 }

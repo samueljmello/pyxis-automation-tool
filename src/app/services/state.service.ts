@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { CookieService } from 'angular2-cookie/core';
 
 import { SettingsModel } from '../models/settings.model';
@@ -7,23 +8,54 @@ import { SettingsModel } from '../models/settings.model';
 @Injectable()
 export class StateService {
 
+  public company: string = 'Pyxis Automation Tool';
   public clientId: string = process.env.PYXIS_INSTAGRAM_CLIENT_ID;
-
+  public error: boolean = false;
+  public errorMessage: string = '';
   public loading: boolean = true;
   public settings: SettingsModel = new SettingsModel();
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private cookie: CookieService,
-    private router: Router
+    private router: Router,
+    private title: Title
   ) {
+    this.setTitle();
     this.restore();
+
+    this.router.events
+      .filter(event => event instanceof NavigationEnd)
+      .map(() => this.activatedRoute)
+      .map(route => {
+        while (route.firstChild) route = route.firstChild;
+        return route;
+      })
+      .filter(route => route.outlet === 'primary')
+      .mergeMap(route => route.data)
+      .subscribe((event) => {
+        this.setTitle(event['title']);
+      }
+    );
   }
 
   public goTo(url: string) {
     this.loading = true;
     setTimeout(() => {
-      this.router.navigateByUrl(url);
+      this.router.navigateByUrl(url).then((result) => {
+        if (!result) {
+          this.loading = false;
+        }
+      });
     }, 250);
+  }
+
+  public setTitle(newTitle: string = '') {
+    let title = `${this.company}`;
+    if (newTitle && newTitle !== '') {
+      title += ` | ${newTitle}`;
+    }
+    this.title.setTitle(title);
   }
 
   public save(settings: SettingsModel) {
@@ -34,7 +66,6 @@ export class StateService {
   public store() {
     this.cookie.put('apiUrl', this.settings.apiUrl);
     this.cookie.put('authUrl', this.settings.authUrl);
-    this.cookie.put('apiKey', this.settings.apiKey);
     this.cookie.put('redirectUrl', this.settings.redirectUrl);
     this.cookie.put('fromAccounts', JSON.stringify(this.settings.fromAccounts));
     this.cookie.put('toAccounts', JSON.stringify(this.settings.toAccounts));

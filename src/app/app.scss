@@ -35,11 +35,23 @@ body {
 }
 
 .alert {
-  background-color: #c51162;
-  color: #fff;
+  border: 1px solid #f00;
+  color: #f00;
   padding: 10px;
   display: block;
   margin-bottom: 10px;
+
+  p {
+    margin: 0;
+    font-weight: bold;
+  }
+  ul {
+    margin: .4em 0;
+    padding-left: 2em;
+  }
+  li {
+    padding: .1em 0;
+  }
 }
 
 [md-mini-fab] {

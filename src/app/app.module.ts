@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MaterialModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule }  from '@angular/platform-browser';
+import { BrowserModule, Title }  from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { JsonpModule } from '@angular/http';
 
@@ -38,6 +38,7 @@ import { AppRouting, AppRoutingProviders } from './app.routing';
     CookieService,
     InstagramService,
     StateService,
+    Title
   ],
   bootstrap: [ AppComponent ]
 })

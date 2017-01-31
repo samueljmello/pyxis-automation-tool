@@ -12,19 +12,19 @@
     </td>
     </tr>
     </table>
-    <!--
-    <md-list *ngIf="rssFeed && !processing">
-      <md-list-item *ngFor="let message of rssFeed.rss.channel.item; let i = index;">
-        <img md-list-avatar [src]="message.image._href">
-        <h3 md-line>{{message.title}}</h3>
+
+    <md-list *ngIf="feed && feed.length > 0">
+      <md-list-item *ngFor="let post of feed; let i = index;">
+        <img md-list-avatar [src]="post.image">
+        <h3 md-line>{{ post.title }}</h3>
         <p md-line>
-          <span><a [href]="message.link" target="_BLANK">{{ message.link}}</a></span>
+          <span><a [href]="post.link" target="_BLANK">{{ post.link }}</a></span>
         </p>
-        <p md-line>
-          <span><a [href]="message.enclosure._url" target="_BLANK">{{ message.enclosure._url}}</a></span>
-        </p>
+        <p md-line>{{ post.date | date:'medium' }}</p>
       </md-list-item>
     </md-list>
+
+    <!--
     <div *ngIf="rssFeed && processing">
       <md-progress-bar class="progress-bar" [attr.color]="processColor" mode="determinate" [value]="processProgress">
       </md-progress-bar>
@@ -35,5 +35,6 @@
       </md-list>
     </div>
     !-->
+    
   </div>
 </div>

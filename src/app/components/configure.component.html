@@ -2,7 +2,7 @@
   <h2 md-dialog-title>Settings</h2>
 
   <div id="configuration">
-    <span class="alert" *ngIf="error">{{ errorMessage }}</span>
+    <div class="alert" *ngIf="state.error" [innerHTML]="state.errorMessage"></div>
     <form (ngSubmit)="save()" #settingsForm="ngForm" novalidate>
 
       <h4 md-dialog-title>API Settings</h4>
@@ -16,34 +16,17 @@
         <input md-input type="text" [(ngModel)]="settings.redirectUrl" name="redirectUrl" placeholder="Redirect URL">
       </md-input-container>
 
-      <h4 md-dialog-title>Connect Instagram Account</h4>
-      <div>
-        <button md-mini-fab type="button" color="primary" *ngIf="!settings.apiKey" (click)="authorize();" title="Authorize Account">
-          <md-icon>fingerprint</md-icon>
-        </button>
-        <button md-mini-fab md-micro-fab type="button" color="warn" *ngIf="settings.apiKey" (click)="deauthorize();" title="De-Authorize Acccount">
-          <md-icon>no_encryption</md-icon>
-        </button>
-        <button md-button type="button" *ngIf="settings.apiKey" (click)="deauthorize();" title="De-Authorize Acccount">
-          {{ userFullName }}
-        </button>
-      </div>
-
       <h4 md-dialog-title>From Accounts</h4>
       <table class="wide">
         <tr *ngFor="let account of settings.fromAccounts; let i = index; trackBy:trackByIndex">
           <td class="button-cell">
-            <button md-mini-fab md-micro-fab type="button" color="warn" (click)="removeAccount('from',i)" title="Remove Acccount"><md-icon>clear</md-icon></button>
+            <button md-mini-fab md-micro-fab type="button" color="warn" (click)="removeAccount('from',i)" title="Remove Account"><md-icon>clear</md-icon></button>
           </td>
-          <td>
-            <md-input-container class="wide">
-              <input md-input type="text" [(ngModel)]="settings.fromAccounts[i]" name="fromAccount_{{i}}" placeholder="Account Name">
-            </md-input-container>
-          </td>
+          <td><a href="https://www.instagram.com/{{ settings.fromAccounts[i].username }}" target="_BLANK">{{ settings.fromAccounts[i].username }}</a> ({{ settings.fromAccounts[i].name }})</td>
         </tr>
         <tr>
           <td colspan="2">
-            <button md-mini-fab md-micro-fab type="button" color="accent" (click)="addAccount('from')" title="Add New Acccount">
+            <button md-mini-fab md-micro-fab type="button" color="accent" (click)="addAccount('from')" title="Add New Account">
               <md-icon>add</md-icon>
             </button>
           </td>
@@ -54,17 +37,13 @@
       <table class="wide">
         <tr *ngFor="let account of settings.toAccounts; let i = index; trackBy:trackByIndex">
           <td class="button-cell">
-            <button md-mini-fab md-micro-fab color="warn" type="button" (click)="removeAccount('to',i)" title="Remove Acccount"><md-icon>clear</md-icon></button>
+            <button md-mini-fab md-micro-fab color="warn" type="button" (click)="removeAccount('to',i)" title="Remove Account"><md-icon>clear</md-icon></button>
           </td>
-          <td>
-            <md-input-container class="wide">
-              <input md-input type="text" [(ngModel)]="settings.toAccounts[i]" name="toAccount_{{i}}" placeholder="Account Name">
-            </md-input-container>
-          </td>
+          <td><a href="https://www.instagram.com/{{ settings.toAccounts[i].username }}" target="_BLANK">{{ settings.toAccounts[i].username }}</a> ({{ settings.toAccounts[i].name }})</td>
         </tr>
         <tr>
           <td colspan="2">
-            <button md-mini-fab md-micro-fab color="accent" type="button" (click)="addAccount('to')" title="Add New Acccount">
+            <button md-mini-fab md-micro-fab color="accent" type="button" (click)="addAccount('to')" title="Add New Account">
               <md-icon>add</md-icon>
             </button>
           </td>
