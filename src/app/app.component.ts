@@ -9,8 +9,4 @@ import { StateService } from './services/state.service';
   styleUrls: ['./app.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class AppComponent {
-
-  constructor(private state: StateService, private router: Router) {}
-
-}
+export class AppComponent {}
