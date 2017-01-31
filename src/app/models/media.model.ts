@@ -12,7 +12,7 @@ export class MediaModel {
     this.id = objectToMap.id;
     this.image = objectToMap.images.thumbnail.url;
     this.link = objectToMap.link;
-    this.date = objectToMap.created_time;
+    this.date = (parseInt(objectToMap.created_time) * 1000).toString();
 
     if (objectToMap.caption && objectToMap.caption.text) {
       this.title = objectToMap.caption.text

@@ -46,6 +46,7 @@ export class ProcessComponent implements OnInit {
     this.instagram.getMedia(accounts[0].id, accounts[0].token).subscribe(
       (response) => {
         for (let i = 0; i < response.data.length; i++) {
+          console.log(response.data[i]);
           this.feed.push(new MediaModel(response.data[i]));
         }
       },
