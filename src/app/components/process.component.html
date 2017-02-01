@@ -7,14 +7,18 @@
     
     <md-list>
       <md-list-item>
-        <div>
-          <button md-mini-fab (click)="start()" title="Start Feed Repost">
-            <md-icon>backup</md-icon>
-          </button>
-          <button md-mini-fab (click)="preload()" title="Refresh Feed">
-            <md-icon>refresh</md-icon>
-          </button>  
-        </div>
+        <md-input-container class="wide">
+          <input md-input type="date" [(ngModel)]="after" name="after" placeholder="After This Date">
+        </md-input-container>
+        <md-input-container class="wide">
+          <input md-input type="date" [(ngModel)]="before" name="before" placeholder="Before This Date">
+        </md-input-container>
+        <button md-mini-fab (click)="start()" title="Start Feed Repost">
+          <md-icon>backup</md-icon>
+        </button>
+        <button md-mini-fab (click)="preload()" title="Refresh Feed">
+          <md-icon>refresh</md-icon>
+        </button>
         <md-checkbox class="checkbox-solo" checked="checked" (click)="toggleMedia();"></md-checkbox>
       </md-list-item>
     </md-list>

@@ -5,12 +5,12 @@ export class SettingsModel {
   public apiUrl: string = 'https://api.instagram.com/v1/';
   public authUrl: string = 'https://api.instagram.com/oauth/authorize/';
   public redirectUrl: string = window.location.origin + '/authorize';
+  public clientId: string = '';
 
   public fromAccounts: Array<AccountModel> = new Array();
   public toAccounts: Array<AccountModel> = new Array();
 
   public constructor(
-      APIKey: string = '',
       FromAccounts: Array<AccountModel> = new Array(),
       ToAccounts: Array<AccountModel> = new Array()
     ) {
@@ -22,6 +22,7 @@ export class SettingsModel {
     if (this.apiUrl
       && this.authUrl
       && this.redirectUrl
+      && this.clientId
       && this.isArrayValid(this.fromAccounts)
       && this.isArrayValid(this.toAccounts)) {
       return true;
@@ -39,6 +40,9 @@ export class SettingsModel {
       }
       if (!this.authUrl) {
         message += '<li>Authorization Authentication Endpoint</li>';
+      }
+      if (!this.clientId) {
+        message += '<li>Client ID</li>';
       }
       if (!this.isArrayValid(this.fromAccounts)) {
         message += '<li>From Accounts</li>';

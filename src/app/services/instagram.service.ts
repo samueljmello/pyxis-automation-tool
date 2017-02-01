@@ -85,8 +85,15 @@ export class InstagramService {
       .catch(this.handleError);
   };
 
-  public getMedia(userId: string, token: string): Observable<any> {
-    return this.get(`users/${userId}/media/recent`, token)
+  public getMedia(userId: string, token: string, after: string = '', before: string = ''): Observable<any> {
+    let params = 'count=100';
+    if (after && after !== '') {
+      params += `&min_timestamp=${after}`;
+    }
+    if (before && before !== '') {
+      params += `&max_timestamp=${before}`;
+    }
+    return this.get(`users/${userId}/media/recent`, token, params)
       .map(this.extractData)
       .catch(this.handleError);
   }

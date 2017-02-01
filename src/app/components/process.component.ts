@@ -17,6 +17,9 @@ export class ProcessComponent implements OnInit {
   private feed: Array<any>;
   private all: boolean = true;
 
+  private after: string;
+  private before: string;
+
   constructor(
     private cookie: CookieService,
     private instagram: InstagramService,
@@ -46,7 +49,15 @@ export class ProcessComponent implements OnInit {
       this.state.loading = false;
       return;
     }
-    this.instagram.getMedia(accounts[0].id, accounts[0].token).subscribe(
+    let afterDate: string;
+    if (this.after) {
+      afterDate = new Date(this.after).getTime().toString();
+    }
+    let beforeDate: string;
+    if (this.before) {
+      beforeDate = new Date(this.before).getTime().toString();
+    }
+    this.instagram.getMedia(accounts[0].id, accounts[0].token, afterDate, beforeDate).subscribe(
       (response) => {
         for (let i = 0; i < response.data.length; i++) {
           this.feed.unshift(new MediaModel(response.data[i]));

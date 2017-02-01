@@ -9,8 +9,7 @@ import { SettingsModel } from '../models/settings.model';
 @Injectable()
 export class StateService {
 
-  public company: string = 'Pyxis Automation Tool';
-  public clientId: string = process.env.PYXIS_INSTAGRAM_CLIENT_ID;
+  public company: string = 'Instagram Batch Repost Tool';
   public error: boolean = false;
   public errorMessage: string = '';
   public loading: boolean = true;
@@ -69,13 +68,13 @@ export class StateService {
     this.cookie.put('apiUrl', this.settings.apiUrl);
     this.cookie.put('authUrl', this.settings.authUrl);
     this.cookie.put('redirectUrl', this.settings.redirectUrl);
+    this.cookie.put('clientId', this.settings.clientId);
     this.cookie.put('fromAccounts', JSON.stringify(this.settings.fromAccounts));
     this.cookie.put('toAccounts', JSON.stringify(this.settings.toAccounts));
   }
 
   private restore() {
     this.settings = new SettingsModel(
-      this.cookie.get('apiKey'),
       this.getCookieAndParse('fromAccounts'),
       this.getCookieAndParse('toAccounts')
     );
@@ -88,6 +87,7 @@ export class StateService {
     if (this.cookie.get('redirectUrl')) {
       this.settings.redirectUrl = this.cookie.get('redirectUrl');
     }
+    this.settings.clientId = this.cookie.get('clientId');
   }
 
   public getCookieAndParse(key: string) {

@@ -78,7 +78,7 @@ export class ConfigureComponent implements OnInit {
   }
 
   private authorizationUrl(): string {
-    const clientId = this.state.clientId;
+    const clientId = this.settings.clientId;
     const redirectUrl = encodeURI(this.settings.redirectUrl);
     let authUrl = this.settings.authUrl;
     authUrl += `?client_id=${clientId}`;
